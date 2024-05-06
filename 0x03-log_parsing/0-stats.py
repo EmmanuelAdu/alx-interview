@@ -5,6 +5,25 @@
 import sys
 import signal
 
+
+def print_status(status_count, tot_file_size):
+    """Print status
+
+    Print the total file size and the number of requests for each
+    status code. The status codes are sorted by their numerical
+    value.
+
+    Arguments:
+        status_count (dict): A dictionary with the number of
+            requests for each status code.
+        tot_file_size (int): The total file size.
+    """
+    print("File size: {:d}".format(tot_file_size))
+    for k, v in sorted(status_count.items()):
+        if v:
+            print("{}: {:d}".format(k, v))
+
+
 try:
     total_line = 0
     tot_file_size = 0
@@ -23,22 +42,23 @@ try:
         line = line.strip()
         parts = line.split()
 
-        ip_address, _, _, status_code, file_size = parts
+        _, _, _, _, status_code, file_size = parts
 
-        if len(line) != 7:
+        if len(parts) != 7:
             continue
 
-        status_code = int(status_code)
+        try:
+            status_code = int(status_code)
+            file_size = int(file_size)
+        except ValueError:
+            continue
         if status_code in status_count:
             status_count[status_code] += 1
 
-        tot_file_size += int(file_size)
+        tot_file_size += file_size
         total_line += 1
         if total_line % 10 == 0:
-            print("File size: {}".format(tot_file_size))
-            for status_code, count in sorted(status_count.items()):
-                if count > 0:
-                    print("{}: {}".format(status_code, count))
+            print_status(status_count, tot_file_size)
 
 except KeyboardInterrupt:
     signal.signal(signal.SIGINT, signal.SIG_DFL)
