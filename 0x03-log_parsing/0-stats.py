@@ -3,7 +3,6 @@
 
 
 import sys
-import signal
 
 
 def print_status(status_count, tot_file_size):
