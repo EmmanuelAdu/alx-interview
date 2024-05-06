@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """Log parsing"""
 
 
@@ -39,28 +39,18 @@ try:
     }
 
     for line in sys.stdin:
-        line = line.strip()
         parts = line.split()
 
+        if len(parts) > 2:
+            total_line += 1
+            status_code = (int(parts[-2]))
+            file_size = (int(parts[-1]))
+            if status_code in status_count:
+                status_count[status_code] += 1
 
-        if len(parts) != 7:
-            continue
-
-        _, _, _, status_code, file_size = parts
-
-        try:
-            status_code = int(status_code)
-            file_size = int(file_size)
-        except ValueError:
-            continue
-        if status_code in status_count:
-            status_count[status_code] += 1
-
-        tot_file_size += file_size
-        total_line += 1
+            tot_file_size += file_size
         if total_line % 10 == 0:
             print_status(status_count, tot_file_size)
 
 except KeyboardInterrupt:
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-    sys.exit(0)
+   pass
