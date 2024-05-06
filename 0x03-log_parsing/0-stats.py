@@ -42,10 +42,11 @@ try:
         line = line.strip()
         parts = line.split()
 
-        _, _, _, _, status_code, file_size = parts
 
         if len(parts) != 7:
             continue
+
+        _, _, _, status_code, file_size = parts
 
         try:
             status_code = int(status_code)
