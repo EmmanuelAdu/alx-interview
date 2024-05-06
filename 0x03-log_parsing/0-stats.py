@@ -22,7 +22,7 @@ try:
     for line in sys.stdin:
         line = line.strip()
         parts = line.split()
-        
+
         ip_address, _, _, status_code, file_size = parts
 
         if len(line) != 7:
